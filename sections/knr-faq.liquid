@@ -1,0 +1,51 @@
+{%- assign questions = product.metafields.custom.faq.value -%}
+
+{%- if questions != blank -%}
+  {{ 'knr-faq.css' | asset_url | stylesheet_tag }}
+
+  <section
+    class="knr-faq"
+    {% if section.settings.heading != blank %}
+      aria-labelledby="KnrFaqHeading-{{ section.id }}"
+    {% endif %}
+  >
+    {%- if section.settings.heading != blank -%}
+      <h2 id="KnrFaqHeading-{{ section.id }}" class="knr-faq__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="knr-faq__list">
+      {%- for item in questions -%}
+        <details
+          class="knr-faq__item"
+          name="knr-faq-{{ section.id }}"
+          {% if forloop.first and section.settings.open_first %}
+            open
+          {% endif %}
+        >
+          <summary class="knr-faq__question">
+            <h3>{{ item.question.value }}</h3>
+            {%- render 'knr-icon', icon: 'chevron-bold-down' -%}
+          </summary>
+          <div class="knr-faq__answer">{{ item.reponse | metafield_tag }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KNR - FAQ",
+  "class": "knr-section-faq",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Questions issues du métachamp produit custom.faq (métaobjets « Question FAQ »)."
+    },
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Questions fréquentes" },
+    { "type": "checkbox", "id": "open_first", "label": "Ouvrir la première question", "default": true }
+  ],
+  "presets": [{ "name": "KNR - FAQ" }]
+}
+{% endschema %}

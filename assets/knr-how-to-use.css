@@ -1,0 +1,135 @@
+.knr-how-to-use {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px 0 120px;
+  color: var(--knr-color-text);
+}
+
+.knr-how-to-use :where(h2, h3, p, ol) {
+  margin: 0;
+  padding: 0;
+}
+
+.knr-how-to-use__heading {
+  padding: 0 var(--knr-gutter);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 40px;
+  letter-spacing: -0.04em;
+}
+
+.knr-how-to-use__steps {
+  display: flex;
+  gap: 8px;
+  padding: 0 var(--knr-gutter);
+  list-style: none;
+}
+
+.knr-how-to-use__step {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.knr-how-to-use__media {
+  aspect-ratio: 1;
+  background: var(--knr-color-sand);
+  container-type: size;
+}
+
+.knr-how-to-use__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--knr-focal-position) !important;
+}
+
+.knr-how-to-use__details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 24px;
+}
+
+.knr-how-to-use__number {
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.04em;
+}
+
+.knr-how-to-use__title {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: -0.02em;
+}
+
+.knr-how-to-use__text {
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: -0.02em;
+}
+
+.knr-how-to-use__text p {
+  margin: 0;
+}
+
+.knr-how-to-use__link {
+  display: none;
+  align-self: flex-start;
+  margin-top: auto;
+  border-bottom: 0.8px solid currentColor;
+  color: inherit;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.knr-how-to-use__progress {
+  display: none;
+}
+
+@media (max-width: 749px) {
+  .knr-how-to-use {
+    padding-bottom: 64px;
+  }
+
+  .knr-how-to-use__heading {
+    padding: 0 24px;
+  }
+
+  .knr-how-to-use__steps {
+    padding: 0 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 24px;
+    scrollbar-width: none;
+  }
+
+  .knr-how-to-use__steps::-webkit-scrollbar {
+    display: none;
+  }
+
+  .knr-how-to-use__step {
+    flex: 0 0 255px;
+    scroll-snap-align: start;
+  }
+
+  .knr-how-to-use__details {
+    padding: 0 16px;
+  }
+
+  .knr-how-to-use__link {
+    display: block;
+  }
+
+  .knr-how-to-use__progress {
+    display: block;
+    align-self: center;
+  }
+}

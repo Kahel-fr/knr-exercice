@@ -1,0 +1,56 @@
+{%- if section.blocks.size > 0 -%}
+  {{ 'knr-reassurance.css' | asset_url | stylesheet_tag }}
+  {%- if section.blocks.size > 1 -%}
+    <script src="{{ 'knr-reassurance.js' | asset_url }}" defer></script>
+  {%- endif -%}
+
+  <section
+    class="knr-reassurance"
+    style="--knr-reassurance-bg: {{ section.settings.background }};"
+    aria-label="{{ section.settings.label | escape }}"
+  >
+    <ul class="knr-reassurance__list" data-knr-reassurance>
+      {%- for block in section.blocks -%}
+        <li class="knr-reassurance__item" {{ block.shopify_attributes }}>
+          <p class="knr-reassurance__title">{{ block.settings.title }}</p>
+          <div class="knr-reassurance__text">{{ block.settings.text }}</div>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.blocks.size > 1 -%}
+      <ol class="knr-reassurance__dots" aria-hidden="true">
+        {%- for block in section.blocks -%}
+          <li class="knr-reassurance__dot{% if forloop.first %} is-active{% endif %}"></li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KNR - Réassurance",
+  "class": "knr-section-reassurance",
+  "settings": [
+    { "type": "color", "id": "background", "label": "Couleur de fond", "default": "#DCD5C3" },
+    { "type": "text", "id": "label", "label": "Libellé accessible de la section", "default": "Nos engagements" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Argument",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre", "default": "Livraison offerte" },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texte",
+          "info": "Maj + Entrée pour forcer un retour à la ligne, comme dans la maquette."
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "KNR - Réassurance" }]
+}
+{% endschema %}

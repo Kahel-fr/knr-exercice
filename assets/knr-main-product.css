@@ -1,0 +1,975 @@
+/* --knr-header-height : posée par knr-header.css quand le header est transparent (0 sinon),
+   pour que le hero passe sous le header. */
+
+.knr-product {
+  --knr-product-panel-width: 456px;
+  --knr-product-gutter: 40px;
+  --knr-product-gap: 8px;
+  --knr-related-info-gap: 8px;
+  --knr-related-info-line: 14px;
+
+  /* Contexte d'empilement (les images en z-index -1 passent sous le panneau) placé au-dessus des sections suivantes :
+     sans z-index, la barre sticky (fixed, z-index 10) y resterait enfermée et passerait sous leurs éléments positionnés.
+     Reste sous le header (z-index 20). */
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--knr-product-panel-width) var(--knr-product-gutter);
+  margin-top: calc(-1 * var(--knr-header-height, 0px));
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+}
+
+.knr-body:has(.knr-header--transparent) .knr-product::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 0.24), rgb(0 0 0 / 0));
+  pointer-events: none;
+}
+
+/* Resets en :where() : spécificité d'une seule classe, pour que les règles .knr-product__* déclarées ensuite l'emportent. */
+.knr-product :where(p, h1, h2, ol, ul, fieldset, legend) {
+  margin: 0;
+  padding: 0;
+}
+
+.knr-product :where(ol, ul) {
+  list-style: none;
+}
+
+.knr-product :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.knr-product :where(button) {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.knr-product__media {
+  /* Sous le panneau : les images passent derrière son fond blanc. */
+  position: relative;
+  z-index: -1;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr))
+    calc(var(--knr-product-panel-width) + var(--knr-product-gutter) - var(--knr-product-gap));
+  /* Hero fixe (Figma) ; la rangée d'images absorbe la hauteur ajoutée quand le panneau s'allonge (accordéons) :
+     le bas des images reste aligné sur le bas des miniatures, sans vide avant la section suivante. */
+  grid-template-rows: 728px minmax(300px, 1fr);
+  grid-auto-rows: 609px;
+  gap: var(--knr-product-gap);
+  align-self: stretch;
+}
+
+/* 4 médias ou plus : une rangée de plus sous le panneau, l'alignement n'a plus de sens ; rangées fixes. */
+.knr-product__media:has(> :nth-child(4)) {
+  grid-template-rows: 728px 609px;
+  align-self: start;
+}
+
+.knr-product__media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.knr-product__media-item {
+  background: var(--knr-color-sand);
+  overflow: hidden;
+}
+
+.knr-product__media-item--hero {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 750px) {
+  .knr-product__media-item:not(.knr-product__media-item--hero) {
+    position: relative;
+    container-type: size;
+  }
+
+  /* Quand la rangée s'allonge, l'image garde l'échelle et la position de son cadrage par défaut (609px de haut,
+     centré sur le point focal) : le cadre révèle la suite vers le bas au lieu de zoomer. Elle ne s'agrandit,
+     depuis le haut, que si la photo n'a plus de contenu à révéler. Unités cq* : dimensions de la cellule. */
+  .knr-product__media-item:not(.knr-product__media-item--hero) img {
+    --knr-default-height: 609px;
+    --knr-default-image-height: max(var(--knr-default-height), 100cqw / var(--knr-ratio, 1));
+    --knr-image-top: clamp(
+      var(--knr-default-height) - var(--knr-default-image-height),
+      var(--knr-default-height) / 2 - var(--knr-focal-y, 0.5) * var(--knr-default-image-height),
+      0px
+    );
+    --knr-image-height: max(var(--knr-default-image-height), 100cqh - var(--knr-image-top));
+    --knr-image-width: calc(var(--knr-image-height) * var(--knr-ratio, 1));
+
+    position: absolute;
+    top: var(--knr-image-top);
+    left: clamp(100cqw - var(--knr-image-width), 50cqw - var(--knr-focal-x, 0.5) * var(--knr-image-width), 0px);
+    width: var(--knr-image-width);
+    max-width: none;
+    height: var(--knr-image-height);
+  }
+}
+
+.knr-product__progress,
+.knr-product__gallery-nav {
+  display: none;
+}
+
+.knr-product__panel {
+  position: relative;
+  z-index: 1;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'breadcrumb breadcrumb'
+    'badges badges'
+    'title rating'
+    'scores scores'
+    'description description'
+    'options options'
+    'price price'
+    'form form'
+    'delivery delivery'
+    'accordions accordions'
+    'related related';
+  column-gap: 10px;
+  margin-top: 96px;
+  /* Seul le texte sous les miniatures déborde sous la galerie : le bas des miniatures s'aligne sur le bas des images. */
+  margin-bottom: calc(-1 * (var(--knr-related-info-gap) + var(--knr-related-info-line)));
+  padding: 40px 40px 0;
+  background: var(--knr-color-bg);
+}
+
+.knr-product__heading {
+  display: contents;
+}
+
+.knr-product__breadcrumb {
+  grid-area: breadcrumb;
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--knr-color-gold);
+}
+
+.knr-product__breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.knr-product__breadcrumb li + li::before {
+  content: '/';
+  margin: 0 0.3em;
+}
+
+.knr-product__breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.knr-product__badges {
+  grid-area: badges;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 40px;
+}
+
+.knr-product__badge {
+  padding: 5px 4px;
+  border: 0.5px solid var(--knr-color-text);
+  border-radius: 2px;
+  font-size: 12px;
+  line-height: 10px;
+  text-transform: uppercase;
+}
+
+.knr-product__title {
+  grid-area: title;
+  margin-top: 24px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  text-transform: uppercase;
+}
+
+.knr-product__rating {
+  grid-area: rating;
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: center;
+  align-self: start;
+  column-gap: 4px;
+  row-gap: 4px;
+  margin-top: 24px;
+  white-space: nowrap;
+  font-size: 10px;
+  line-height: 14px;
+  color: var(--knr-color-gold-light);
+}
+
+.knr-product__rating-count {
+  grid-column: 1 / -1;
+  text-align: right;
+}
+
+.knr-product__rating-count:hover {
+  color: var(--knr-color-gold);
+}
+
+.knr-product__scores {
+  grid-area: scores;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 24px;
+}
+
+.knr-product__scores strong {
+  font-weight: 600;
+}
+
+.knr-product__dot {
+  width: 2px;
+  height: 2px;
+  background: currentColor;
+}
+
+.knr-product__description {
+  grid-area: description;
+  margin-top: 16px;
+}
+
+.knr-product__description p {
+  margin: 0;
+}
+
+.knr-product__options {
+  grid-area: options;
+  display: grid;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.knr-product__option {
+  border: 0;
+  min-width: 0;
+}
+
+.knr-product__option-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.knr-product__option-value {
+  position: relative;
+  cursor: pointer;
+}
+
+.knr-product__option-value input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.knr-product__option-value span {
+  display: block;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.knr-product__option-value:hover span {
+  border-color: var(--knr-color-muted);
+}
+
+.knr-product__option-value input:checked + span {
+  border-color: var(--knr-color-text);
+}
+
+.knr-product__option-value input:focus-visible + span {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: 2px;
+}
+
+.knr-product__price {
+  grid-area: price;
+  margin-top: 24px;
+}
+
+.knr-product__price-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.knr-product__price-current {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.knr-product__price-compare {
+  color: var(--knr-color-muted);
+}
+
+.knr-product__price-unit {
+  color: var(--knr-color-gold);
+}
+
+.knr-product__form {
+  grid-area: form;
+  margin-top: 40px;
+}
+
+.knr-product__add {
+  display: block;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--knr-color-text);
+  border-radius: 2px;
+  background: var(--knr-color-text);
+  color: var(--knr-color-bg);
+  font-size: 13px;
+  line-height: 21px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.knr-product__add:hover:not(:disabled) {
+  background: var(--knr-color-bg);
+  color: var(--knr-color-text);
+}
+
+.knr-product__add:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.knr-product__delivery {
+  grid-area: delivery;
+  margin-top: 16px;
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.knr-product__delivery-list {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.knr-product__delivery-list::-webkit-scrollbar {
+  display: none;
+}
+
+.knr-product__delivery-list:focus-visible {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: 2px;
+}
+
+.knr-product__delivery-item {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+
+.knr-product__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.knr-product__dot-item {
+  width: 16px;
+  height: 1px;
+  background: var(--knr-color-sand);
+}
+
+.knr-product__dot-item.is-active {
+  background: var(--knr-color-text);
+}
+
+.knr-product__accordions {
+  grid-area: accordions;
+  margin-top: 40px;
+}
+
+.knr-product__accordion {
+  border-top: 1px solid var(--knr-color-border);
+}
+
+.knr-product__accordion-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.knr-product__accordion-title::-webkit-details-marker {
+  display: none;
+}
+
+.knr-product__accordion-title .knr-icon {
+  transition: transform 0.2s;
+}
+
+.knr-product__accordion[open] .knr-product__accordion-title .knr-icon {
+  transform: rotate(180deg);
+}
+
+.knr-product__accordion-content {
+  margin-top: -12px;
+  padding-bottom: 20px;
+}
+
+.knr-product__accordion-content > * {
+  margin: 0;
+}
+
+.knr-product__accordion-content > * + * {
+  margin-top: 8px;
+}
+
+.knr-product__related {
+  grid-area: related;
+  margin-top: 40px;
+}
+
+.knr-product__related-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.knr-product__related-title {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+
+.knr-product__related-nav {
+  display: flex;
+  gap: 8px;
+}
+
+/* Icône de 16px dans une zone cliquable de 24px : le padding agrandit la cible, la marge négative garde la position. */
+.knr-product__related-arrow {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  margin: -4px;
+  border: 0;
+  background: none;
+}
+
+/* visibility plutôt que display : une flèche masquée garde sa place, l'autre ne se décale pas. */
+.knr-product__related-arrow[hidden] {
+  visibility: hidden;
+}
+
+.knr-product__related-arrow:focus-visible {
+  outline: 1px solid var(--knr-color-text);
+}
+
+.knr-product__related-list {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.knr-product__related-list::-webkit-scrollbar {
+  display: none;
+}
+
+.knr-product__related-card {
+  position: relative;
+  flex: 0 0 159px;
+  scroll-snap-align: start;
+}
+
+.knr-product__related-image {
+  display: block;
+  height: 208px;
+  background: var(--knr-color-sand);
+  container-type: size;
+}
+
+.knr-product__related-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--knr-focal-position) !important;
+}
+
+.knr-product__related-form {
+  position: absolute;
+  top: 184px;
+  left: 8px;
+}
+
+.knr-product__related-add {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: var(--knr-color-bg);
+}
+
+.knr-product__related-add .knr-icon {
+  width: 10px;
+  height: 10px;
+}
+
+.knr-product__related-add-icon {
+  display: contents;
+}
+
+.knr-product__related-added-icon,
+.knr-product__related-add.is-added .knr-product__related-add-icon {
+  display: none;
+}
+
+.knr-product__related-add.is-added .knr-product__related-added-icon {
+  display: contents;
+}
+
+.knr-product__related-add[aria-busy='true'] {
+  cursor: progress;
+  opacity: 0.5;
+}
+
+.knr-product__related-add:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.knr-product__related-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: var(--knr-related-info-gap);
+  padding: 0 4px;
+  font-size: 11px;
+  line-height: var(--knr-related-info-line);
+  white-space: nowrap;
+}
+
+.knr-product__related-info a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.knr-product__sticky {
+  position: fixed;
+  right: var(--knr-product-gutter);
+  bottom: 24px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 561px;
+  max-width: calc(100% - 2 * var(--knr-product-gutter));
+  padding: 8px 24px 8px 8px;
+  border: 1px solid #f9f8f5;
+  background: var(--knr-color-bg);
+  /* Masquée tant que le bouton principal est visible (knr-main-product.js) ; visibility la retire aussi du clavier. */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s,
+    visibility 0s 0.3s;
+}
+
+.knr-product__sticky.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+
+.knr-product__sticky-image {
+  flex-shrink: 0;
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+}
+
+.knr-product__sticky-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.knr-product__sticky-title {
+  font-size: 14px;
+  line-height: 14px;
+  text-transform: uppercase;
+}
+
+.knr-product__sticky-options {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.knr-product__sticky-option {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  line-height: 20px;
+}
+
+.knr-product__sticky-option[aria-pressed='true'] {
+  border-color: var(--knr-color-text);
+}
+
+.knr-product__sticky-option:focus-visible {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: 2px;
+}
+
+.knr-product__sticky-price {
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.knr-product__sticky-add.knr-product__add {
+  flex-shrink: 0;
+  width: 200px;
+  height: 56px;
+}
+
+@media (max-width: 1199px) {
+  .knr-product {
+    --knr-product-panel-width: 400px;
+    --knr-product-gutter: 24px;
+  }
+
+  .knr-product__panel {
+    padding: 32px 32px 0;
+  }
+}
+
+@media (max-width: 749px) {
+  .knr-product {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .knr-product__media {
+    display: flex;
+    align-self: stretch;
+    gap: 0;
+    height: 550px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .knr-product__media::-webkit-scrollbar {
+    display: none;
+  }
+
+  .knr-product__media-item,
+  .knr-product__media-item--hero {
+    flex: 0 0 100%;
+    height: auto;
+    scroll-snap-align: start;
+    container-type: size;
+  }
+
+  .knr-product__media-item img {
+    object-position: var(--knr-focal-position) !important;
+  }
+
+  .knr-product__progress {
+    display: block;
+    position: relative;
+    width: 97.5px;
+    height: 0.8px;
+    margin: -126px auto 0;
+    overflow: hidden;
+    background: #f9f8f5;
+  }
+
+  .knr-product__progress span {
+    display: block;
+    width: calc(100% / var(--knr-progress-count, 1));
+    height: 100%;
+    background: var(--knr-color-text);
+    /* Index fractionnaire mis à jour au scroll (knr-main-product.js) : le curseur suit le doigt. */
+    transform: translateX(calc(var(--knr-progress-index, 0) * 100%));
+  }
+
+  /* Zone cliquable de 44px centrée sur l'icône de 16px (placée à 16px du bord et 204px du haut). */
+  .knr-product__gallery-nav {
+    position: absolute;
+    top: 190px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--knr-color-text);
+  }
+
+  .knr-product__gallery-nav--prev {
+    left: 2px;
+  }
+
+  .knr-product__gallery-nav--next {
+    right: 2px;
+  }
+
+  .knr-product__gallery-nav[hidden] {
+    display: none;
+  }
+
+  .knr-product__gallery-nav:focus-visible {
+    outline: 1px solid var(--knr-color-text);
+    outline-offset: -8px;
+  }
+
+  .knr-product__media:focus-visible {
+    outline: 1px solid var(--knr-color-text);
+    outline-offset: -2px;
+  }
+
+  .knr-product__panel {
+    /* Statique : les badges se positionnent par rapport à .knr-product, sur l'image. */
+    position: static;
+    grid-template-areas:
+      'title price'
+      'rating rating'
+      'scores scores'
+      'description description'
+      'options options'
+      'form form'
+      'delivery delivery'
+      'accordions accordions'
+      'related related';
+    column-gap: 8px;
+    /* La carte remonte de 115px sur l'image (sous la barre de progression quand elle existe). */
+    margin: -115px 16px 0;
+    padding: 24px 16px;
+  }
+
+  .knr-product__progress + .knr-product__panel {
+    margin-top: 10px;
+  }
+
+  .knr-product__breadcrumb {
+    display: none;
+  }
+
+  .knr-product__badges {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    margin-top: 0;
+  }
+
+  .knr-product__badge {
+    padding: 6px 4px 4px;
+    border: 0;
+    border-radius: 2px;
+    background: var(--knr-color-bg);
+    line-height: 1;
+  }
+
+  .knr-product__title {
+    margin-top: 0;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: 0.32px;
+  }
+
+  .knr-product__price {
+    grid-area: price;
+    margin-top: 0;
+    text-align: right;
+  }
+
+  .knr-product__price-main {
+    justify-content: flex-end;
+    gap: 3px;
+    white-space: nowrap;
+  }
+
+  .knr-product__price-current {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .knr-product__price-compare {
+    color: var(--knr-color-text);
+    font-size: 10px;
+    line-height: 12px;
+  }
+
+  .knr-product__price-unit {
+    font-size: 8px;
+    line-height: 16px;
+    white-space: nowrap;
+  }
+
+  .knr-product__rating {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 16px;
+    font-size: 10px;
+    line-height: 14px;
+    color: var(--knr-color-gold);
+  }
+
+  .knr-product__rating-count {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .knr-product__rating-count::before {
+    content: '';
+    width: 2px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .knr-product__scores,
+  .knr-product__description {
+    margin-top: 16px;
+  }
+
+  .knr-product__scores strong {
+    font-weight: 400;
+  }
+
+  .knr-product__options {
+    margin-top: 24px;
+  }
+
+  .knr-product__option-values {
+    flex-wrap: nowrap;
+    margin-top: 8px;
+  }
+
+  .knr-product__option-value {
+    flex: 1;
+    text-align: center;
+    border-bottom: 0.8px solid transparent;
+  }
+
+  .knr-product__option-value:has(input:checked) {
+    border-color: var(--knr-color-text);
+  }
+
+  .knr-product__option-value span,
+  .knr-product__option-value input:checked + span {
+    border-bottom: 0;
+  }
+
+  .knr-product__form,
+  .knr-product__accordions,
+  .knr-product__related {
+    margin-top: 24px;
+  }
+
+  .knr-product__delivery {
+    font-size: 10px;
+    line-height: 12px;
+  }
+
+  .knr-product__accordion {
+    border-top: 0.8px solid rgb(0 53 146 / 0.24);
+  }
+
+  .knr-product__related {
+    padding: 16px 0;
+  }
+
+  .knr-product__related-list {
+    margin-right: -16px;
+  }
+
+  .knr-product__related-image {
+    background: #f5f4f1;
+  }
+
+  .knr-product__related-info {
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  .knr-product__sticky {
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    gap: 12px;
+    padding: 8px 16px 8px 8px;
+    box-shadow: 0 -1px 0 var(--knr-color-border);
+  }
+
+  .knr-product__sticky-image {
+    width: 56px;
+    height: 56px;
+  }
+
+  .knr-product__sticky-options {
+    display: none;
+  }
+
+  .knr-product__sticky-price {
+    margin-top: 4px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .knr-product__sticky-add.knr-product__add {
+    width: auto;
+    height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knr-product__sticky,
+  .knr-product__sticky.is-visible {
+    transition: none;
+  }
+}

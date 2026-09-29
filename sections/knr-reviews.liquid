@@ -1,0 +1,182 @@
+{%- liquid
+  assign rating = product.metafields.custom.note.value
+  assign rating_count = product.metafields.custom.nombre_avis.value
+  assign distribution = product.metafields.custom.repartition_notes.value
+  assign reviews = product.metafields.custom.avis.value
+  assign page_size = section.settings.page_size
+  assign list_id = 'KnrReviewsList-' | append: section.id
+  assign filter_id = 'KnrReviewsFilter-' | append: section.id
+-%}
+
+{%- if rating != blank or reviews != blank -%}
+  {{ 'knr-reviews.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'knr-reviews.js' | asset_url }}" defer></script>
+
+  <section
+    class="knr-reviews"
+    id="{{ section.settings.anchor | default: section.id }}"
+    aria-labelledby="KnrReviewsHeading-{{ section.id }}"
+  >
+    <h2 id="KnrReviewsHeading-{{ section.id }}" class="knr-reviews__heading">{{ section.settings.heading }}</h2>
+
+    <div class="knr-reviews__summary">
+      <div class="knr-reviews__score">
+        {%- if rating != blank -%}
+          <p class="knr-reviews__score-line">
+            {%- render 'knr-stars', rating: rating.rating, max: rating.scale_max -%}
+            <span>{{ rating.rating }} {{ section.settings.out_of_label }} {{ rating.scale_max | round }}</span>
+          </p>
+        {%- endif -%}
+        {%- if rating_count != blank -%}
+          <p>{{ section.settings.based_on_label }} {{ rating_count }} {{ section.settings.reviews_label }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if distribution != blank -%}
+        {%- assign distribution_total = distribution | sum -%}
+        <ul class="knr-reviews__distribution">
+          {%- for count in distribution limit: 5 -%}
+            {%- liquid
+              assign stars = 6 | minus: forloop.index
+              assign percent = 0
+              if distribution_total > 0
+                assign percent = count | times: 100.0 | divided_by: distribution_total
+              endif
+            -%}
+            <li class="knr-reviews__bar">
+              {%- render 'knr-stars', rating: stars, outline: true -%}
+              <span class="knr-reviews__bar-track" aria-hidden="true">
+                <span style="width: {{ percent }}%;"></span>
+              </span>
+              <span class="knr-reviews__bar-count">{{ count }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="knr-reviews__actions">
+        {%- if section.settings.write_link != blank -%}
+          <a class="knr-reviews__button knr-reviews__button--primary" href="{{ section.settings.write_link }}">
+            {{- section.settings.write_label -}}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.question_link != blank -%}
+          <a class="knr-reviews__button" href="{{ section.settings.question_link }}">
+            {{- section.settings.question_label -}}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if reviews != blank -%}
+      <div class="knr-reviews__content" data-knr-reviews>
+        <div class="knr-reviews__feed">
+          <div class="knr-reviews__toolbar">
+            <button
+              type="button"
+              class="knr-reviews__filter"
+              aria-expanded="false"
+              aria-controls="{{ filter_id }}"
+              data-knr-reviews-filter-toggle
+            >
+              {%- render 'knr-icon', icon: 'filter' -%}
+              {{ section.settings.filter_label }}
+            </button>
+            <fieldset class="knr-reviews__filter-options" id="{{ filter_id }}" hidden>
+              <legend class="knr-visually-hidden">{{ section.settings.filter_label }}</legend>
+              <label>
+                <input type="radio" name="{{ filter_id }}" value="all" checked data-knr-reviews-filter>
+                {{ section.settings.filter_all_label }}
+              </label>
+              <label>
+                <input type="radio" name="{{ filter_id }}" value="verified" data-knr-reviews-filter>
+                {{ section.settings.filter_verified_label }}
+              </label>
+            </fieldset>
+          </div>
+
+          <ul class="knr-reviews__list" id="{{ list_id }}" data-knr-reviews-list data-page-size="{{ page_size }}">
+            {%- for review in reviews -%}
+              {%- assign verified = review.verifie.value -%}
+              <li
+                class="knr-reviews__item"
+                data-verified="{{ verified | default: false }}"
+                tabindex="-1"
+                {% if forloop.index > page_size %}
+                  hidden
+                {% endif %}
+              >
+                <div class="knr-reviews__item-header">
+                  {%- render 'knr-stars', rating: review.note.value.rating, max: review.note.value.scale_max -%}
+                  {%- if review.date != blank -%}
+                    <time class="knr-reviews__date" datetime="{{ review.date.value }}">
+                      {{- review.date.value | date: '%d/%m/%y' -}}
+                    </time>
+                  {%- endif -%}
+                </div>
+                <p class="knr-reviews__author">
+                  {{ review.auteur.value }}
+                  {%- if verified %}
+                    <span class="knr-reviews__verified">{{ section.settings.verified_label }}</span>
+                  {%- endif -%}
+                </p>
+                <div class="knr-reviews__body">
+                  {%- if review.titre != blank -%}
+                    <h3 class="knr-reviews__title">{{ review.titre.value }}</h3>
+                  {%- endif -%}
+                  <p class="knr-reviews__text">{{ review.texte.value | newline_to_br }}</p>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          <p class="knr-reviews__empty" role="status" hidden data-knr-reviews-empty>{{ section.settings.empty_label }}</p>
+        </div>
+
+        {%- if reviews.size > page_size -%}
+          <button
+            type="button"
+            class="knr-reviews__button knr-reviews__more"
+            aria-controls="{{ list_id }}"
+            data-knr-reviews-more
+          >
+            {{- section.settings.load_more_label -}}
+          </button>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KNR - Avis clients",
+  "class": "knr-section-reviews",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Contenu issu des métachamps produit : custom.note, custom.nombre_avis, custom.repartition_notes (5 → 1 étoile) et custom.avis (métaobjets « Avis client »)."
+    },
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Avis clients" },
+    { "type": "text", "id": "anchor", "label": "Ancre", "default": "avis-clients" },
+    { "type": "range", "id": "page_size", "label": "Avis affichés par page", "min": 1, "max": 10, "step": 1, "default": 3 },
+    { "type": "header", "content": "Résumé" },
+    { "type": "text", "id": "out_of_label", "label": "Libellé « sur »", "default": "sur" },
+    { "type": "text", "id": "based_on_label", "label": "Libellé « basé sur »", "default": "Basé sur" },
+    { "type": "text", "id": "reviews_label", "label": "Libellé « avis »", "default": "avis" },
+    { "type": "text", "id": "write_label", "label": "Bouton écrire un avis", "default": "Écrire un avis" },
+    { "type": "url", "id": "write_link", "label": "Lien écrire un avis" },
+    { "type": "text", "id": "question_label", "label": "Bouton poser une question", "default": "Poser une question" },
+    { "type": "url", "id": "question_link", "label": "Lien poser une question" },
+    { "type": "header", "content": "Liste" },
+    { "type": "text", "id": "verified_label", "label": "Badge achat vérifié", "default": "Vérifié" },
+    { "type": "text", "id": "filter_label", "label": "Bouton filtre", "default": "Filtrer" },
+    { "type": "text", "id": "filter_all_label", "label": "Filtre : tous", "default": "Tous les avis" },
+    { "type": "text", "id": "filter_verified_label", "label": "Filtre : vérifiés", "default": "Achats vérifiés uniquement" },
+    { "type": "text", "id": "empty_label", "label": "Aucun avis pour ce filtre", "default": "Aucun avis ne correspond à ce filtre." },
+    { "type": "text", "id": "load_more_label", "label": "Bouton charger plus", "default": "Charger plus" }
+  ],
+  "presets": [{ "name": "KNR - Avis clients" }]
+}
+{% endschema %}

@@ -1,0 +1,103 @@
+{
+  "layout": "knr",
+  "sections": {
+    "main": {
+      "type": "knr-main-product",
+      "blocks": {
+        "delivery_free": {
+          "type": "delivery_line",
+          "settings": { "text": "Livraison offerte dès 60 € d'achat" }
+        },
+        "delivery_returns": {
+          "type": "delivery_line",
+          "settings": { "text": "Retours gratuits sous 30 jours" }
+        },
+        "accordion_description": {
+          "type": "accordion",
+          "settings": { "heading": "Description", "metafield": "custom.description_longue", "open": true }
+        },
+        "accordion_benefits": {
+          "type": "accordion",
+          "settings": { "heading": "Bienfaits", "metafield": "custom.bienfaits", "open": false }
+        },
+        "accordion_ingredients": {
+          "type": "accordion",
+          "settings": { "heading": "Ingrédients clés", "metafield": "custom.ingredients_cles", "open": false }
+        },
+        "accordion_skin": {
+          "type": "accordion",
+          "settings": { "heading": "Adapté aux peaux", "metafield": "custom.types_de_peau", "open": false }
+        }
+      },
+      "block_order": ["delivery_free", "delivery_returns", "accordion_description", "accordion_benefits", "accordion_ingredients", "accordion_skin"],
+      "settings": {
+        "breadcrumb_root": "soins-anti-age",
+        "reviews_label": "avis",
+        "reviews_anchor": "avis-clients",
+        "score_1_label": "Yuka",
+        "score_2_label": "INCI Beauty",
+        "unit_price_separator": "par",
+        "add_to_cart_label": "Ajouter au panier",
+        "sold_out_label": "Épuisé",
+        "delivery_text": "En stock, livraison estimée",
+        "delivery_autoplay": 4,
+        "sticky_bar": true,
+        "related_heading": "Complétez votre rituel"
+      }
+    },
+    "ingredients": {
+      "type": "knr-ingredients"
+    },
+    "how_to_use": {
+      "type": "knr-how-to-use",
+      "settings": { "heading": "How to use", "link_label": "Lire plus" }
+    },
+    "before_after": {
+      "type": "knr-before-after",
+      "settings": {
+        "heading": "Ce que disent nos clientes",
+        "label_before": "Before",
+        "label_after": "After"
+      }
+    },
+    "faq": {
+      "type": "knr-faq",
+      "settings": { "heading": "Questions fréquentes", "open_first": true }
+    },
+    "reviews": {
+      "type": "knr-reviews",
+      "settings": {
+        "heading": "Avis clients",
+        "anchor": "avis-clients",
+        "page_size": 3,
+        "write_link": "shopify://pages/contact",
+        "question_link": "shopify://pages/contact"
+      }
+    },
+    "latest_news": {
+      "type": "knr-latest-news",
+      "settings": { "blog": "news", "heading": "Latest news", "view_all_label": "Voir tous les articles", "limit": 4 }
+    },
+    "newsletter": {
+      "type": "knr-newsletter",
+      "settings": {
+        "heading": "L'alliance de la science botanique et du luxe naturel pour une peau visiblement rajeunie en 4 semaines.",
+        "email_label": "E-mail",
+        "submit_label": "S'inscrire",
+        "disclaimer": "Formule brevetée, testée dermatologiquement, 97 % d'ingrédients d'origine naturelle."
+      }
+    },
+    "reassurance": {
+      "type": "knr-reassurance",
+      "blocks": {
+        "shipping": { "type": "item", "settings": { "title": "Livraison offerte", "text": "<p>Livraison offerte<br>dès 60 € d'achat<br>en France métropolitaine.</p>" } },
+        "returns": { "type": "item", "settings": { "title": "Retours gratuits", "text": "<p>Retours acceptés<br>jusqu'à 30 jours<br>après réception.</p>" } },
+        "payment": { "type": "item", "settings": { "title": "Paiement sécurisé", "text": "<p>Paiement 100 % sécurisé<br>par carte bancaire,<br>PayPal ou virement.</p>" } },
+        "service": { "type": "item", "settings": { "title": "Service client", "text": "<p>Du lundi au vendredi<br>de 9h à 18h par email<br>et téléphone.</p>" } }
+      },
+      "block_order": ["shipping", "returns", "payment", "service"],
+      "settings": { "background": "#DCD5C3", "label": "Nos engagements" }
+    }
+  },
+  "order": ["main", "ingredients", "how_to_use", "before_after", "faq", "reviews", "latest_news", "newsletter", "reassurance"]
+}

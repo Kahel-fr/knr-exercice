@@ -1,0 +1,61 @@
+{%- liquid
+  assign image = product.metafields.custom.engagement_image.value
+  assign eyebrow = product.metafields.custom.engagement_accroche.value
+  assign text = product.metafields.custom.engagement_texte
+  assign author = product.metafields.custom.engagement_signature.value
+-%}
+
+{%- if eyebrow != blank or text != blank -%}
+  {{ 'knr-ingredients.css' | asset_url | stylesheet_tag }}
+
+  <section
+    class="knr-ingredients"
+    {% if eyebrow != blank %}
+      aria-labelledby="KnrIngredientsHeading-{{ section.id }}"
+    {% endif %}
+  >
+    {%- if image != blank -%}
+      <div class="knr-ingredients__media knr-focal" style="{% render 'knr-focal-style', image: image %}">
+        {{
+          image
+          | image_url: width: 2880
+          | image_tag:
+            loading: 'lazy',
+            widths: '750, 1100, 1500, 2200, 2880',
+            sizes: '100vw',
+            alt: ''
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="knr-ingredients__content">
+      {%- if eyebrow != blank -%}
+        <h2 id="KnrIngredientsHeading-{{ section.id }}" class="knr-ingredients__eyebrow">{{ eyebrow }}</h2>
+      {%- endif -%}
+
+      {%- if text != blank -%}
+        <figure class="knr-ingredients__quote">
+          <blockquote class="knr-ingredients__text">{{ text | metafield_tag }}</blockquote>
+          {%- if author != blank -%}
+            <figcaption class="knr-ingredients__author">{{ author }}</figcaption>
+          {%- endif -%}
+        </figure>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KNR - Ingrédients",
+  "class": "knr-section-ingredients",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Contenu issu des métachamps produit : custom.engagement_image, custom.engagement_accroche, custom.engagement_texte, custom.engagement_signature."
+    }
+  ],
+  "presets": [{ "name": "KNR - Ingrédients" }]
+}
+{% endschema %}

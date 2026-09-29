@@ -1,0 +1,40 @@
+{
+  "type": "footer",
+  "name": "KNR Footer",
+  "sections": {
+    "footer": {
+      "type": "knr-footer",
+      "blocks": {
+        "menu_discover": {
+          "type": "menu",
+          "settings": { "heading": "Découvrir", "menu": "footer-decouvrir" }
+        },
+        "menu_service": {
+          "type": "menu",
+          "settings": { "heading": "Service client", "menu": "footer-service-client" }
+        },
+        "menu_legal": {
+          "type": "menu",
+          "settings": { "heading": "Légal & Transparence", "menu": "footer-legal" }
+        },
+        "about": {
+          "type": "about",
+          "settings": {
+            "heading": "À propos de Maison Célestine",
+            "text": "<p>Maison Célestine est une marque de soins anti-âge haut de gamme formulée autour d'actifs rares et certifiés biologiques, guidée par une expertise médicale et un rituel simple, précis et efficace.</p>",
+            "certification_text": "Certifié COSMOS ORGANIC par ECOCERT Greenlife",
+            "link_label": "Voir le certificat"
+          }
+        }
+      },
+      "block_order": ["menu_discover", "menu_service", "menu_legal", "about"],
+      "settings": {
+        "wordmark": "maison célestine",
+        "show_localization": true,
+        "copyright": "Tous droits réservés.",
+        "social_menu": "social"
+      }
+    }
+  },
+  "order": ["footer"]
+}

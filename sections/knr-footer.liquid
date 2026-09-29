@@ -1,0 +1,182 @@
+{{ 'knr-footer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'knr-footer.js' | asset_url }}" defer></script>
+
+<footer class="knr-footer">
+  <div class="knr-footer__columns">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'menu' -%}
+          {%- assign menu = block.settings.menu -%}
+          {%- if menu != blank -%}
+            {%- assign menu_title = block.settings.heading | default: menu.title -%}
+            <nav class="knr-footer__column knr-footer__column--menu" aria-label="{{ menu_title | escape }}" {{ block.shopify_attributes }}>
+              <details class="knr-footer__menu" data-knr-footer-accordion>
+                <summary class="knr-footer__summary">
+                  <h2 class="knr-footer__title">{{ menu_title }}</h2>
+                  {%- render 'knr-icon', icon: 'chevron-bold-down' -%}
+                </summary>
+                <ul class="knr-footer__links">
+                  {%- for link in menu.links -%}
+                    <li>
+                      <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </details>
+            </nav>
+          {%- endif -%}
+
+        {%- when 'about' -%}
+          <div class="knr-footer__column knr-footer__about" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h2 class="knr-footer__title">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            <div class="knr-footer__about-text">{{ block.settings.text }}</div>
+            <div class="knr-footer__certification">
+              {%- if block.settings.certification_image != blank -%}
+                {{
+                  block.settings.certification_image
+                  | image_url: width: 141
+                  | image_tag:
+                    class: 'knr-footer__certification-image',
+                    loading: 'lazy',
+                    widths: '47, 94, 141',
+                    sizes: '47px',
+                    alt: block.settings.certification_image.alt
+                }}
+              {%- endif -%}
+              {%- if block.settings.certification_text != blank -%}
+                <p class="knr-footer__certification-text">{{ block.settings.certification_text }}</p>
+              {%- endif -%}
+              {%- if block.settings.link != blank -%}
+                <a class="knr-footer__certification-link" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="knr-footer__logo" aria-hidden="true">
+    {%- if section.settings.logo != blank -%}
+      {{
+        section.settings.logo
+        | image_url: width: 2720
+        | image_tag: loading: 'lazy', widths: '780, 1440, 2720', sizes: '100vw', alt: ''
+      }}
+    {%- else -%}
+      <p class="knr-footer__wordmark">{{ section.settings.wordmark | default: shop.name }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="knr-footer__bottom">
+    {%- if section.settings.show_localization -%}
+      {%- form 'localization', class: 'knr-footer__localization' -%}
+        {%- if localization.available_countries.size > 1 -%}
+          <div class="knr-footer__select">
+            <label class="knr-visually-hidden" for="KnrFooterCountry-{{ section.id }}">{{ section.settings.country_label }}</label>
+            <select id="KnrFooterCountry-{{ section.id }}" name="country_code" data-knr-autosubmit>
+              {%- for country in localization.available_countries -%}
+                <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                  {{- country.name }} ({{ country.currency.symbol }})
+                </option>
+              {%- endfor -%}
+            </select>
+            {%- render 'knr-icon', icon: 'chevron-bold-down' -%}
+          </div>
+        {%- else -%}
+          <p>{{ localization.country.name }} ({{ localization.country.currency.symbol }})</p>
+        {%- endif -%}
+
+        {%- if localization.available_languages.size > 1 -%}
+          <div class="knr-footer__select">
+            <label class="knr-visually-hidden" for="KnrFooterLanguage-{{ section.id }}">{{ section.settings.language_label }}</label>
+            <select id="KnrFooterLanguage-{{ section.id }}" name="locale_code" data-knr-autosubmit>
+              {%- for language in localization.available_languages -%}
+                <option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                  {{- language.endonym_name | capitalize -}}
+                </option>
+              {%- endfor -%}
+            </select>
+            {%- render 'knr-icon', icon: 'chevron-bold-down' -%}
+          </div>
+        {%- else -%}
+          <p>{{ localization.language.endonym_name | capitalize }}</p>
+        {%- endif -%}
+      {%- endform -%}
+    {%- endif -%}
+
+    <p class="knr-footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright }}</p>
+
+    {%- assign social_menu = section.settings.social_menu -%}
+    {%- if social_menu != blank -%}
+      <ul class="knr-footer__social">
+        {%- for link in social_menu.links -%}
+          {%- liquid
+            assign url = link.url | downcase
+            assign icon = ''
+            if url contains 'facebook'
+              assign icon = 'facebook'
+            elsif url contains 'instagram'
+              assign icon = 'instagram'
+            elsif url contains 'tiktok'
+              assign icon = 'tiktok'
+            elsif url contains 'linkedin'
+              assign icon = 'linkedin'
+            endif
+          -%}
+          <li>
+            <a href="{{ link.url }}" target="_blank" rel="noopener">
+              {%- if icon != blank -%}
+                {%- render 'knr-icon', icon: icon -%}
+                <span class="knr-visually-hidden">{{ link.title }}</span>
+              {%- else -%}
+                {{ link.title }}
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "KNR - Footer",
+  "class": "knr-section-footer",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo pleine largeur", "info": "SVG recommandé. Sinon, le texte ci-dessous est affiché." },
+    { "type": "text", "id": "wordmark", "label": "Logo texte (sinon nom de la boutique)" },
+    { "type": "checkbox", "id": "show_localization", "label": "Sélecteurs pays et langue", "default": true },
+    { "type": "text", "id": "country_label", "label": "Libellé pays", "default": "Pays" },
+    { "type": "text", "id": "language_label", "label": "Libellé langue", "default": "Langue" },
+    { "type": "text", "id": "copyright", "label": "Mention copyright", "default": "Tous droits réservés." },
+    { "type": "link_list", "id": "social_menu", "label": "Menu réseaux sociaux", "info": "Un lien par réseau : l'icône est choisie d'après l'URL (Facebook, Instagram, TikTok, LinkedIn)." }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Titre (sinon titre du menu)" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    },
+    {
+      "type": "about",
+      "name": "À propos",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Titre", "default": "À propos" },
+        { "type": "richtext", "id": "text", "label": "Texte" },
+        { "type": "image_picker", "id": "certification_image", "label": "Logo certification" },
+        { "type": "text", "id": "certification_text", "label": "Texte certification" },
+        { "type": "text", "id": "link_label", "label": "Texte du lien", "default": "Voir le certificat" },
+        { "type": "url", "id": "link", "label": "Lien" }
+      ]
+    }
+  ]
+}
+{% endschema %}

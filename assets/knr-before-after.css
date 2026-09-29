@@ -1,0 +1,237 @@
+.knr-before-after {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 80px;
+  background: #f9f8f5;
+  color: var(--knr-color-text);
+  text-align: center;
+}
+
+.knr-before-after :where(h2, p, ul, blockquote) {
+  margin: 0;
+  padding: 0;
+}
+
+.knr-before-after :where(ul) {
+  list-style: none;
+}
+
+.knr-before-after__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 0 40px;
+}
+
+.knr-before-after__heading {
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 48px;
+  letter-spacing: -0.04em;
+}
+
+.knr-before-after__intro {
+  max-width: 540px;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: -0.02em;
+}
+
+.knr-before-after__compare {
+  --knr-compare-height: 640px;
+
+  position: relative;
+  width: 100%;
+  height: var(--knr-compare-height);
+  overflow: hidden;
+  background: var(--knr-color-bg);
+}
+
+.knr-before-after__compare img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.knr-before-after__before {
+  clip-path: inset(0 calc(100% - var(--knr-position)) 0 0);
+}
+
+.knr-before-after__label {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.knr-before-after__label--after {
+  left: auto;
+  right: 40px;
+}
+
+.knr-before-after__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--knr-position);
+  width: 2px;
+  background: var(--knr-color-bg);
+  transform: translateX(-50%);
+}
+
+.knr-before-after__handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--knr-color-bg);
+  transform: translate(-50%, -50%);
+}
+
+/* Curseur natif invisible étendu à toute l'image : glisser n'importe où et le clavier fonctionnent sans JS de drag. */
+.knr-before-after__range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  appearance: none;
+  touch-action: pan-y;
+}
+
+/* Poignée native de la hauteur de l'image : sur iOS, le glisser ne démarre que depuis la poignée. */
+.knr-before-after__range::-webkit-slider-thumb {
+  width: 48px;
+  height: var(--knr-compare-height);
+  appearance: none;
+}
+
+.knr-before-after__range::-moz-range-thumb {
+  width: 48px;
+  height: var(--knr-compare-height);
+  border: 0;
+}
+
+.knr-before-after__compare:has(.knr-before-after__range:focus-visible) .knr-before-after__handle {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: 2px;
+}
+
+.knr-before-after__testimonials {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 970px;
+  padding-top: 40px;
+}
+
+/* Diapositives superposées dans une même cellule : la hauteur est celle du plus long témoignage, sans saut au changement. */
+.knr-before-after__slides {
+  display: grid;
+  width: 100%;
+}
+
+.knr-before-after__slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  grid-area: 1 / 1;
+}
+
+.knr-before-after__slide:not(.is-active) {
+  visibility: hidden;
+}
+
+.knr-before-after__meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--knr-color-gold);
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: -0.04em;
+}
+
+.knr-before-after__quote {
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.04em;
+}
+
+.knr-before-after__nav {
+  display: flex;
+  gap: 16px;
+}
+
+.knr-before-after__arrow {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--knr-color-text);
+  cursor: pointer;
+}
+
+.knr-before-after__arrow:focus-visible {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: -8px;
+}
+
+@media (max-width: 749px) {
+  .knr-before-after {
+    padding: 64px 24px 40px;
+  }
+
+  .knr-before-after__header {
+    padding: 0;
+  }
+
+  .knr-before-after__heading {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .knr-before-after__compare {
+    --knr-compare-height: 192px;
+  }
+
+  .knr-before-after__label {
+    top: 24px;
+    left: 24px;
+  }
+
+  .knr-before-after__label--after {
+    left: auto;
+    right: 24px;
+  }
+
+  .knr-before-after__testimonials {
+    padding-top: 0;
+  }
+
+  .knr-before-after__quote {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.02em;
+  }
+}

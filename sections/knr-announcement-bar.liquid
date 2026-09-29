@@ -1,0 +1,31 @@
+{{ 'knr-announcement-bar.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign delivery_days = settings.knr_delivery_days | append: ''
+  assign delivery_hours = settings.knr_delivery_days | times: 24 | append: ''
+  assign text = section.settings.text | replace: '[jours]', delivery_days | replace: '[heures]', delivery_hours
+-%}
+
+{%- if text != blank -%}
+  <div class="knr-announcement">
+    <p class="knr-announcement__text">
+      {{ text }}
+      {%- if section.settings.link_label != blank and section.settings.link != blank %}
+        <a class="knr-announcement__link" href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KNR - Bandeau d'annonce",
+  "class": "knr-section-announcement",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "text", "id": "text", "label": "Texte", "default": "Livraison estimée sous [heures]h", "info": "[jours] et [heures] sont remplacés par le délai défini dans Paramètres du thème > KNR - Livraison." },
+    { "type": "text", "id": "link_label", "label": "Texte du lien", "default": "consectetur." },
+    { "type": "url", "id": "link", "label": "Lien" }
+  ]
+}
+{% endschema %}

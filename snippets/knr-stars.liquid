@@ -1,0 +1,15 @@
+{% doc %}
+  Affiche une note sur 5 étoiles, remplies proportionnellement (ex. 4.7 → 94 %).
+  Styles dans assets/knr-base.css (.knr-stars), partagés par toutes les sections knr-.
+
+  @param {number} rating - Note (ex. 4.7)
+  @param {number} [max] - Note maximale, 5 par défaut
+  @param {boolean} [outline] - Étoiles vides en contour plutôt que remplies en clair
+{% enddoc %}
+
+{%- liquid
+  assign max = max | default: 5
+  assign percent = rating | times: 100.0 | divided_by: max
+-%}
+
+<span class="knr-stars{% if outline %} knr-stars--outline{% endif %}" style="--knr-rating: {{ percent }}%;" role="img" aria-label="{{ rating }} / {{ max }}"></span>

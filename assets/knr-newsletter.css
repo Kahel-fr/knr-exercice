@@ -1,0 +1,150 @@
+.knr-newsletter {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 120px var(--knr-gutter);
+  color: var(--knr-color-text);
+}
+
+.knr-newsletter :where(h2, p) {
+  margin: 0;
+}
+
+.knr-newsletter__media {
+  height: 540px;
+  overflow: hidden;
+  background: var(--knr-color-sand);
+}
+
+.knr-newsletter__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.knr-newsletter__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  grid-column: 2;
+  padding: 0 40px;
+}
+
+.knr-newsletter__heading {
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 48px;
+  letter-spacing: -0.04em;
+}
+
+.knr-newsletter__signup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.knr-newsletter__field {
+  display: flex;
+}
+
+.knr-newsletter__input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  margin: 0;
+  padding: 0 24px;
+  border: 0.8px solid var(--knr-color-sand);
+  border-right: 0;
+  border-radius: 0;
+  background: var(--knr-color-bg);
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+}
+
+.knr-newsletter__input::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+.knr-newsletter__input:focus-visible {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: -1px;
+}
+
+.knr-newsletter__submit {
+  flex-shrink: 0;
+  width: 160px;
+  height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 0 2px 2px 0;
+  background: var(--knr-color-text);
+  color: var(--knr-color-bg);
+  font: inherit;
+  font-size: 13px;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+}
+
+.knr-newsletter__submit:focus-visible {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: 2px;
+}
+
+.knr-newsletter__disclaimer {
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+}
+
+.knr-newsletter__message {
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+}
+
+.knr-newsletter__message :where(ul) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 749px) {
+  .knr-newsletter {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 24px 64px;
+  }
+
+  .knr-newsletter__media {
+    height: 232px;
+  }
+
+  .knr-newsletter__content {
+    padding: 0;
+  }
+
+  .knr-newsletter__heading {
+    font-size: 32px;
+  }
+
+  .knr-newsletter__field {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .knr-newsletter__input {
+    flex: none;
+    border-right: 0.8px solid var(--knr-color-sand);
+  }
+
+  .knr-newsletter__submit {
+    width: 100%;
+    border-radius: 2px;
+  }
+}

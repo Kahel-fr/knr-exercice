@@ -1,0 +1,49 @@
+{% doc %}
+  Icônes SVG des sections knr-. search, account, cart et location reprennent les tracés de la maquette Figma
+  (couleur passée en currentColor pour suivre le texte : blanc sur header transparent, noir sinon).
+
+  @param {string} icon - chevron-down | chevron-right | chevron-left | plus | check | search | account | cart | location | menu | close | filter | chevron-bold-left | chevron-bold-right | chevron-bold-down | drag | facebook | instagram | tiktok | linkedin
+{% enddoc %}
+
+{%- case icon -%}
+  {%- when 'chevron-down' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'chevron-right' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'chevron-left' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'plus' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.2"/></svg>
+  {%- when 'check' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'search' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="currentColor" stroke-linecap="square" stroke-linejoin="round"/></svg>
+  {%- when 'account' -%}
+    <svg class="knr-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M2.25 15C4.00184 13.1419 6.38026 12 9 12C11.6197 12 13.9982 13.1419 15.75 15M12.375 5.625C12.375 7.48896 10.864 9 9 9C7.13604 9 5.625 7.48896 5.625 5.625C5.625 3.76104 7.13604 2.25 9 2.25C10.864 2.25 12.375 3.76104 12.375 5.625Z" stroke="currentColor" stroke-linecap="square" stroke-linejoin="round"/></svg>
+  {%- when 'cart' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10.6667 4.66667C10.6667 5.37391 10.3857 6.05219 9.88562 6.55229C9.38552 7.05238 8.70724 7.33333 8 7.33333C7.29276 7.33333 6.61448 7.05238 6.11438 6.55229C5.61428 6.05219 5.33333 5.37391 5.33333 4.66667M2 2.71111L2 12.5333C2 13.2801 2 13.6534 2.14532 13.9387C2.27316 14.1895 2.47713 14.3935 2.72801 14.5213C3.01323 14.6667 3.3866 14.6667 4.13333 14.6667L11.8667 14.6667C12.6134 14.6667 12.9868 14.6667 13.272 14.5213C13.5229 14.3935 13.7268 14.1895 13.8547 13.9387C14 13.6534 14 13.2801 14 12.5333V2.71111C14 2.51459 14 2.41633 13.9728 2.33721C13.9227 2.19169 13.8083 2.07735 13.6628 2.02724C13.5837 2 13.4854 2 13.2889 2H2.71111C2.51459 2 2.41633 2 2.33722 2.02724C2.19169 2.07735 2.07735 2.19169 2.02724 2.33722C2 2.41633 2 2.51459 2 2.71111Z" stroke="currentColor" stroke-linecap="square" stroke-linejoin="round"/></svg>
+  {%- when 'location' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 8.66667C9.10457 8.66667 10 7.77124 10 6.66667C10 5.5621 9.10457 4.66667 8 4.66667C6.89543 4.66667 6 5.5621 6 6.66667C6 7.77124 6.89543 8.66667 8 8.66667Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 14.6667C10.6667 12 13.3333 9.61218 13.3333 6.66667C13.3333 3.72115 10.9455 1.33333 8 1.33333C5.05448 1.33333 2.66667 3.72115 2.66667 6.66667C2.66667 9.61218 5.33333 12 8 14.6667Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  {%- when 'menu' -%}
+    <svg class="knr-icon" width="16" height="5" viewBox="0 0 16 5" fill="none" aria-hidden="true"><path d="M0 .5h16M0 4.5h16" stroke="currentColor"/></svg>
+  {%- when 'close' -%}
+    <svg class="knr-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor"/></svg>
+  {%- when 'chevron-bold-left' -%}
+    <svg class="knr-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/></svg>
+  {%- when 'chevron-bold-right' -%}
+    <svg class="knr-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4 10l4-4-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/></svg>
+  {%- when 'chevron-bold-down' -%}
+    <svg class="knr-icon" width="8" height="4" viewBox="0 0 8 4" fill="none" overflow="visible" aria-hidden="true"><path d="M0 0l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/></svg>
+  {%- when 'drag' -%}
+    <svg class="knr-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 1.5v9M1 1.5v9M11 1.5v9" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+  {%- when 'facebook' -%}
+    <svg class="knr-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 0a10 10 0 0 0-1.6 19.9V12.9H5.9V10h2.5V7.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.2c-1.2 0-1.6.8-1.6 1.6V10h2.8l-.5 2.9h-2.3v7A10 10 0 0 0 10 0Z"/></svg>
+  {%- when 'instagram' -%}
+    <svg class="knr-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="4.5" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="10" r="3.6" stroke="currentColor" stroke-width="1.8"/><circle cx="14.6" cy="5.4" r="1.1" fill="currentColor"/></svg>
+  {%- when 'tiktok' -%}
+    <svg class="knr-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.8 2h2.7a4.4 4.4 0 0 0 3.9 3.9v2.7a7 7 0 0 1-3.9-1.2v5.4a5.1 5.1 0 1 1-5.1-5.1c.3 0 .5 0 .8.1v2.8a2.4 2.4 0 1 0 1.6 2.2V2Z"/></svg>
+  {%- when 'linkedin' -%}
+    <svg class="knr-icon" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2.6 7h3.2v10.4H2.6V7Zm1.6-5.1a1.85 1.85 0 1 1 0 3.7 1.85 1.85 0 0 1 0-3.7ZM7.8 7h3v1.4h.1c.4-.8 1.5-1.7 3.1-1.7 3.3 0 3.9 2.2 3.9 5v5.7h-3.2v-5c0-1.2 0-2.7-1.7-2.7s-1.9 1.3-1.9 2.6v5.1H7.8V7Z"/></svg>
+  {%- when 'filter' -%}
+    <svg class="knr-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4.5 9h9M2.25 4.5h13.5M6.75 13.5h4.5" stroke="currentColor" stroke-width="0.8" stroke-linecap="square"/></svg>
+{%- endcase -%}

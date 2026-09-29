@@ -1,0 +1,238 @@
+.knr-footer {
+  background: #f9f8f5;
+  color: var(--knr-color-text);
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+}
+
+.knr-footer :where(h2, p, ul) {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+.knr-footer :where(ul) {
+  list-style: none;
+}
+
+.knr-footer :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.knr-footer :where(a, summary, select):focus-visible {
+  outline: 1px solid var(--knr-color-text);
+  outline-offset: 2px;
+}
+
+.knr-footer__columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 280fr)) minmax(0, 400fr);
+  gap: 40px;
+  padding: 80px var(--knr-gutter) 40px;
+}
+
+.knr-footer__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  list-style: none;
+}
+
+.knr-footer__summary::-webkit-details-marker {
+  display: none;
+}
+
+.knr-footer__summary .knr-icon {
+  display: none;
+}
+
+/* Desktop : menus toujours dépliés, même fermés (knr-footer.js les ouvre ensuite pour l'accessibilité). */
+@media (min-width: 750px) {
+  .knr-footer__menu::details-content {
+    content-visibility: visible;
+  }
+
+  .knr-footer__summary {
+    cursor: default;
+  }
+}
+
+.knr-footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.knr-footer__links a:hover,
+.knr-footer__links a[aria-current] {
+  text-decoration: underline;
+}
+
+.knr-footer__about {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.knr-footer__about-text p {
+  margin: 0;
+}
+
+.knr-footer__certification {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.knr-footer .knr-footer__certification-image {
+  width: 47px;
+  height: 56px;
+  object-fit: contain;
+  object-position: left;
+}
+
+.knr-footer__certification-text {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--knr-color-sand);
+}
+
+.knr-footer__certification-link {
+  align-self: flex-start;
+  border-bottom: 0.8px solid currentColor;
+}
+
+.knr-footer__logo {
+  padding: 0 var(--knr-gutter);
+  container-type: inline-size;
+}
+
+.knr-footer__logo img {
+  width: 100%;
+}
+
+/* « maison célestine » mesure 7,29em en Inter à -0.04em : 13.5cqi remplit la largeur sans jamais passer à la ligne. */
+.knr-footer__wordmark {
+  overflow-x: clip;
+  font-size: 13.5cqi;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.knr-footer__bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  margin-top: 80px;
+  padding: 40px var(--knr-gutter);
+  border-top: 1px solid var(--knr-color-sand);
+}
+
+.knr-footer__localization {
+  display: flex;
+  gap: 16px;
+  justify-self: start;
+}
+
+.knr-footer__select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.knr-footer__select select {
+  field-sizing: content;
+  margin: 0;
+  padding: 0 20px 0 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.knr-footer__select .knr-icon {
+  position: absolute;
+  right: 4px;
+  pointer-events: none;
+}
+
+.knr-footer__social {
+  display: flex;
+  gap: 16px;
+  justify-self: end;
+}
+
+.knr-footer__social a {
+  display: block;
+}
+
+@media (max-width: 749px) {
+  .knr-footer__columns {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 64px 24px 40px;
+  }
+
+  .knr-footer__column--menu {
+    border-top: 1px solid rgb(0 53 146 / 0.24);
+  }
+
+  .knr-footer__column--menu:not(:has(+ .knr-footer__column--menu)) {
+    border-bottom: 1px solid rgb(0 53 146 / 0.24);
+  }
+
+  .knr-footer__summary {
+    margin-bottom: 0;
+    padding: 16px 0;
+    cursor: pointer;
+  }
+
+  .knr-footer__summary .knr-icon {
+    display: block;
+    transition: transform 0.2s;
+  }
+
+  .knr-footer__menu[open] .knr-footer__summary .knr-icon {
+    transform: rotate(180deg);
+  }
+
+  .knr-footer__links {
+    padding-bottom: 16px;
+  }
+
+  .knr-footer__about {
+    margin-top: 40px;
+  }
+
+  .knr-footer__logo {
+    padding: 0;
+  }
+
+  .knr-footer__bottom {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    padding: 40px 24px;
+    line-height: 16px;
+  }
+
+  .knr-footer__localization,
+  .knr-footer__social {
+    justify-self: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knr-footer__summary .knr-icon {
+    transition: none;
+  }
+}

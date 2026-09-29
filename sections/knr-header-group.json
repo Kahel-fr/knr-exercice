@@ -1,0 +1,24 @@
+{
+  "type": "header",
+  "name": "KNR Header",
+  "sections": {
+    "announcement": {
+      "type": "knr-announcement-bar",
+      "settings": {
+        "text": "Livraison estimée sous [heures]h",
+        "link_label": "consectetur.",
+        "link": ""
+      }
+    },
+    "header": {
+      "type": "knr-header",
+      "settings": {
+        "menu": "main-menu",
+        "transparent_on_product": true,
+        "stores_link": "shopify://pages/contact",
+        "stores_label": "Points de vente"
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}

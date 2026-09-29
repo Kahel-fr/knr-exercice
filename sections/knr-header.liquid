@@ -1,0 +1,117 @@
+{{ 'knr-header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'knr-header.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign transparent = false
+  if section.settings.transparent_on_product and template.name == 'product'
+    assign transparent = true
+  endif
+
+  assign logo = section.settings.logo
+  if transparent and section.settings.logo_inverse != blank
+    assign logo = section.settings.logo_inverse
+  endif
+
+  assign menu = section.settings.menu
+-%}
+
+<header class="knr-header{% if transparent %} knr-header--transparent{% endif %}">
+  <a class="knr-header__logo" href="{{ routes.root_url }}">
+    {%- if logo != blank -%}
+      {{
+        logo
+        | image_url: width: 320
+        | image_tag: alt: shop.name, class: 'knr-header__logo-image', loading: 'eager', widths: '160, 320'
+      }}
+    {%- else -%}
+      {{ shop.name }}
+    {%- endif -%}
+  </a>
+
+  {%- if menu != blank -%}
+    <nav class="knr-header__nav" aria-label="{{ menu.title | escape }}">
+      <ul class="knr-header__menu">
+        {%- for link in menu.links -%}
+          <li>
+            <a class="knr-header__menu-link" href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>
+              {{- link.title -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+
+  <div class="knr-header__actions">
+    {%- if section.settings.stores_link != blank -%}
+      <a class="knr-header__action" href="{{ section.settings.stores_link }}">
+        {%- render 'knr-icon', icon: 'location' -%}
+        <span class="knr-visually-hidden">{{ section.settings.stores_label }}</span>
+      </a>
+    {%- endif -%}
+
+    {%- if shop.customer_accounts_enabled -%}
+      <a class="knr-header__action knr-header__action--account" href="{{ routes.account_url }}">
+        {%- render 'knr-icon', icon: 'account' -%}
+        <span class="knr-visually-hidden">{{ section.settings.account_label }}</span>
+      </a>
+    {%- endif -%}
+
+    <a class="knr-header__action" href="{{ routes.search_url }}">
+      {%- render 'knr-icon', icon: 'search' -%}
+      <span class="knr-visually-hidden">{{ section.settings.search_label }}</span>
+    </a>
+
+    <a class="knr-header__action knr-header__cart" href="{{ routes.cart_url }}">
+      {%- render 'knr-icon', icon: 'cart' -%}
+      <span class="knr-visually-hidden">{{ section.settings.cart_label }}</span>
+      <span class="knr-header__cart-count" data-knr-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>
+        {{- cart.item_count -}}
+      </span>
+    </a>
+
+    {%- comment -%} Menu mobile : <details> natif, fonctionne sans JavaScript. {%- endcomment -%}
+    {%- if menu != blank -%}
+      <details class="knr-header__drawer">
+        <summary class="knr-header__action knr-header__burger">
+          <span class="knr-header__burger-open">{%- render 'knr-icon', icon: 'menu' -%}</span>
+          <span class="knr-header__burger-close">{%- render 'knr-icon', icon: 'close' -%}</span>
+          <span class="knr-visually-hidden">{{ section.settings.menu_label }}</span>
+        </summary>
+        <nav class="knr-header__drawer-panel" aria-label="{{ menu.title | escape }}">
+          <ul class="knr-header__drawer-menu">
+            {%- for link in menu.links -%}
+              <li>
+                <a class="knr-header__drawer-link" href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>
+                  {{- link.title -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </details>
+    {%- endif -%}
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "KNR - Header",
+  "class": "knr-section-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (sinon nom de la boutique)" },
+    { "type": "image_picker", "id": "logo_inverse", "label": "Logo clair (header transparent)" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "transparent_on_product", "label": "Transparent sur la page produit", "default": true },
+    { "type": "header", "content": "Icône localisation" },
+    { "type": "url", "id": "stores_link", "label": "Cible de l'icône", "info": "Page, collection ou lien externe (ex. localisateur de boutiques). L'icône est masquée si le champ est vide." },
+    { "type": "text", "id": "stores_label", "label": "Libellé accessible", "default": "Points de vente" },
+    { "type": "header", "content": "Libellés accessibles" },
+    { "type": "text", "id": "account_label", "label": "Libellé compte", "default": "Compte" },
+    { "type": "text", "id": "search_label", "label": "Libellé recherche", "default": "Rechercher" },
+    { "type": "text", "id": "cart_label", "label": "Libellé panier", "default": "Panier" },
+    { "type": "text", "id": "menu_label", "label": "Libellé menu mobile", "default": "Menu" }
+  ]
+}
+{% endschema %}

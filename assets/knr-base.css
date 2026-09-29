@@ -1,0 +1,141 @@
+/* Chargé uniquement par layout/knr.liquid : ces règles globales n'affectent pas le reste du thème. */
+
+:root {
+  --knr-font: 'Inter', sans-serif;
+  --knr-color-text: #000;
+  --knr-color-bg: #fff;
+  --knr-color-gold: #b5a282;
+  --knr-color-gold-light: #e1d3bb;
+  --knr-color-muted: #c2c2c2;
+  --knr-color-border: #d1d1d1;
+  --knr-color-sand: #dcd5c3;
+  --knr-page-width: 1440px;
+  --knr-gutter: 40px;
+}
+
+@media (max-width: 749px) {
+  :root {
+    --knr-gutter: 20px;
+  }
+}
+
+/* Les ancres (ex. lien « 200 avis ») ne passent pas sous le header sticky. */
+html:has(.knr-body) {
+  scroll-padding-top: 56px;
+}
+
+.knr-body,
+.knr-body *,
+.knr-body *::before,
+.knr-body *::after {
+  box-sizing: border-box;
+}
+
+.knr-body {
+  margin: 0;
+  font-family: var(--knr-font);
+  color: var(--knr-color-text);
+  background: var(--knr-color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.knr-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.knr-skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.knr-skip-link:focus {
+  left: 16px;
+  top: 16px;
+  z-index: 100;
+  padding: 8px 16px;
+  background: var(--knr-color-bg);
+}
+
+/* Remplissage partiel : dégradé coupé à --knr-rating, découpé en 5 étoiles par le masque. */
+.knr-stars {
+  --knr-star-fill: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M5.64 1.73C5.76 1.49 5.81 1.38 5.89 1.34C5.96 1.31 6.04 1.31 6.11 1.34C6.19 1.38 6.24 1.49 6.36 1.73L7.45 3.94C7.49 4.01 7.5 4.05 7.53 4.07C7.55 4.1 7.58 4.11 7.61 4.13C7.64 4.14 7.68 4.15 7.75 4.16L10.2 4.52C10.46 4.56 10.58 4.57 10.64 4.64C10.7 4.69 10.72 4.77 10.71 4.84C10.7 4.93 10.61 5.02 10.42 5.2L8.65 6.92C8.6 6.98 8.57 7 8.55 7.04C8.53 7.06 8.52 7.1 8.52 7.13C8.52 7.16 8.52 7.2 8.54 7.28L8.95 9.71C9 9.97 9.02 10.1 8.98 10.17C8.94 10.24 8.88 10.29 8.8 10.3C8.72 10.31 8.6 10.25 8.37 10.13L6.19 8.98C6.12 8.95 6.08 8.93 6.05 8.92C6.02 8.92 5.98 8.92 5.95 8.92C5.92 8.93 5.88 8.95 5.81 8.98L3.63 10.13C3.4 10.25 3.28 10.31 3.2 10.3C3.12 10.29 3.06 10.24 3.02 10.17C2.98 10.1 3 9.97 3.05 9.71L3.46 7.28C3.48 7.2 3.48 7.16 3.48 7.13C3.48 7.1 3.47 7.06 3.45 7.04C3.43 7 3.4 6.98 3.35 6.92L1.58 5.2C1.39 5.02 1.3 4.93 1.29 4.84C1.28 4.77 1.3 4.69 1.36 4.64C1.42 4.57 1.54 4.56 1.8 4.52L4.25 4.16C4.32 4.15 4.36 4.14 4.39 4.13C4.42 4.11 4.45 4.1 4.47 4.07C4.5 4.05 4.51 4.01 4.55 3.94L5.64 1.73Z'/%3E%3C/svg%3E");
+  --knr-star-outline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M5.64 1.73C5.76 1.49 5.81 1.38 5.89 1.34C5.96 1.31 6.04 1.31 6.11 1.34C6.19 1.38 6.24 1.49 6.36 1.73L7.45 3.94C7.49 4.01 7.5 4.05 7.53 4.07C7.55 4.1 7.58 4.11 7.61 4.13C7.64 4.14 7.68 4.15 7.75 4.16L10.2 4.52C10.46 4.56 10.58 4.57 10.64 4.64C10.7 4.69 10.72 4.77 10.71 4.84C10.7 4.93 10.61 5.02 10.42 5.2L8.65 6.92C8.6 6.98 8.57 7 8.55 7.04C8.53 7.06 8.52 7.1 8.52 7.13C8.52 7.16 8.52 7.2 8.54 7.28L8.95 9.71C9 9.97 9.02 10.1 8.98 10.17C8.94 10.24 8.88 10.29 8.8 10.3C8.72 10.31 8.6 10.25 8.37 10.13L6.19 8.98C6.12 8.95 6.08 8.93 6.05 8.92C6.02 8.92 5.98 8.92 5.95 8.92C5.92 8.93 5.88 8.95 5.81 8.98L3.63 10.13C3.4 10.25 3.28 10.31 3.2 10.3C3.12 10.29 3.06 10.24 3.02 10.17C2.98 10.1 3 9.97 3.05 9.71L3.46 7.28C3.48 7.2 3.48 7.16 3.48 7.13C3.48 7.1 3.47 7.06 3.45 7.04C3.43 7 3.4 6.98 3.35 6.92L1.58 5.2C1.39 5.02 1.3 4.93 1.29 4.84C1.28 4.77 1.3 4.69 1.36 4.64C1.42 4.57 1.54 4.56 1.8 4.52L4.25 4.16C4.32 4.15 4.36 4.14 4.39 4.13C4.42 4.11 4.45 4.1 4.47 4.07C4.5 4.05 4.51 4.01 4.55 3.94L5.64 1.73Z' fill='none' stroke='%23000' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  display: inline-block;
+  flex-shrink: 0;
+  width: 60px;
+  height: 12px;
+  background: linear-gradient(
+    90deg,
+    var(--knr-stars-color, var(--knr-color-gold)) var(--knr-rating, 100%),
+    var(--knr-stars-empty-color, var(--knr-color-gold-light)) var(--knr-rating, 100%)
+  );
+  -webkit-mask: var(--knr-star-fill) left / 12px 12px repeat-x;
+  mask: var(--knr-star-fill) left / 12px 12px repeat-x;
+}
+
+/* Étoiles vides en contour : deux calques, car un masque sur l'élément découperait aussi le calque plein. */
+.knr-stars--outline {
+  position: relative;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+}
+
+.knr-stars--outline::before,
+.knr-stars--outline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--knr-stars-color, var(--knr-color-gold));
+}
+
+.knr-stars--outline::before {
+  -webkit-mask: var(--knr-star-outline) left / 12px 12px repeat-x;
+  mask: var(--knr-star-outline) left / 12px 12px repeat-x;
+}
+
+.knr-stars--outline::after {
+  width: var(--knr-rating, 100%);
+  -webkit-mask: var(--knr-star-fill) left / 12px 12px repeat-x;
+  mask: var(--knr-star-fill) left / 12px 12px repeat-x;
+}
+
+/* Centrage d'une image object-fit: cover sur son point focal (variables : snippets/knr-focal-style.liquid).
+   Les unités cq* restent non résolues ici : elles se résolvent sur l'image, par rapport à son conteneur,
+   qui doit être en container-type: size. La section applique object-position: var(--knr-focal-position) !important,
+   car image_tag pose un object-position inline (en %) qui garde le point visible sans le centrer. */
+.knr-focal {
+  --knr-rendered-width: max(100cqw, 100cqh * var(--knr-ratio, 1));
+  --knr-rendered-height: max(100cqh, 100cqw / var(--knr-ratio, 1));
+  --knr-focal-position:
+    clamp(100cqw - var(--knr-rendered-width), 50cqw - var(--knr-focal-x, 0.5) * var(--knr-rendered-width), 0px)
+    clamp(100cqh - var(--knr-rendered-height), 50cqh - var(--knr-focal-y, 0.5) * var(--knr-rendered-height), 0px);
+}
+
+/* Barre de progression des sliders horizontaux, pilotée par assets/knr-scroll-progress.js. */
+.knr-scroll-progress {
+  width: 97.5px;
+  height: 0.8px;
+  overflow: hidden;
+  background: var(--knr-color-sand);
+}
+
+.knr-scroll-progress span {
+  display: block;
+  width: calc(100% / var(--knr-progress-count, 1));
+  height: 100%;
+  background: var(--knr-color-text);
+  transform: translateX(calc(var(--knr-progress-index, 0) * 100%));
+}
+
+.knr-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

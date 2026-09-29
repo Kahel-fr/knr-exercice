@@ -1,0 +1,226 @@
+/* Header transparent : il reste dans le flux, c'est la section produit qui remonte dessous
+   via --knr-header-height (knr-main-product.css). .is-scrolled / .is-hidden : knr-header.js. */
+
+.knr-section-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  transition: transform 0.3s ease;
+}
+
+/* Headroom : on translate le wrapper sticky entier (et pas seulement le header),
+   pour qu'aucune zone invisible ne reste au-dessus du contenu et n'intercepte les clics. */
+.knr-section-header:has(.knr-header.is-hidden) {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knr-section-header {
+    transition: none;
+  }
+}
+
+.knr-body:has(.knr-header--transparent) {
+  --knr-header-height: 56px;
+}
+
+.knr-header {
+  --knr-header-color: var(--knr-color-text);
+  --knr-header-bg: var(--knr-color-bg);
+  --knr-header-badge-text: var(--knr-color-bg);
+
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 56px;
+  padding: 0 24px;
+  background: var(--knr-header-bg);
+  color: var(--knr-header-color);
+  font-size: 12px;
+  line-height: 12px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.knr-header--transparent {
+  --knr-header-color: var(--knr-color-bg);
+  --knr-header-bg: transparent;
+  --knr-header-badge-text: var(--knr-color-text);
+}
+
+/* Le dégradé qui rend le header lisible sur le hero est posé par knr-main-product.css (.knr-product::before) :
+   dessiné ici, il passerait aussi sur le panneau produit. */
+
+.knr-header--transparent.is-scrolled,
+.knr-header--transparent:has(.knr-header__drawer[open]) {
+  --knr-header-color: var(--knr-color-text);
+  --knr-header-bg: var(--knr-color-bg);
+  --knr-header-badge-text: var(--knr-color-bg);
+}
+
+.knr-header :where(ul) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.knr-header :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.knr-header__logo {
+  display: block;
+  flex-shrink: 0;
+  font-size: 20px;
+  line-height: 1;
+  text-transform: lowercase;
+}
+
+.knr-header__logo-image {
+  width: 160px;
+  height: auto;
+}
+
+.knr-header__nav {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+}
+
+.knr-header__menu {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 100%;
+  white-space: nowrap;
+}
+
+.knr-header__menu-link {
+  padding-bottom: 2px;
+  border-bottom: 0.8px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.knr-header__menu-link:hover,
+.knr-header__menu-link[aria-current='page'] {
+  border-color: currentColor;
+}
+
+.knr-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+}
+
+.knr-header__action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  cursor: pointer;
+}
+
+.knr-header__action:not(.knr-header__burger) .knr-icon {
+  stroke-width: 1.25;
+}
+
+.knr-header__action:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 4px;
+}
+
+.knr-header__cart-count {
+  position: absolute;
+  top: -4px;
+  left: 8px;
+  display: grid;
+  place-items: center;
+  min-width: 12px;
+  height: 12px;
+  padding: 0 2px;
+  border-radius: 100px;
+  background: var(--knr-header-color);
+  color: var(--knr-header-badge-text);
+  font-size: 8px;
+  line-height: 8px;
+}
+
+.knr-header__cart-count[hidden] {
+  display: none;
+}
+
+.knr-header__drawer {
+  display: none;
+}
+
+.knr-header__burger {
+  list-style: none;
+}
+
+.knr-header__burger::-webkit-details-marker {
+  display: none;
+}
+
+.knr-header__burger-open,
+.knr-header__burger-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.knr-header__burger-close,
+.knr-header__drawer[open] .knr-header__burger-open {
+  display: none;
+}
+
+.knr-header__drawer[open] .knr-header__burger-close {
+  display: flex;
+}
+
+.knr-header__drawer-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: calc(100dvh - 100%);
+  padding: 32px 24px;
+  overflow-y: auto;
+  background: var(--knr-color-bg);
+  color: var(--knr-color-text);
+}
+
+.knr-header__drawer-menu {
+  display: grid;
+  gap: 24px;
+}
+
+.knr-header__drawer-link {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+@media (max-width: 749px) {
+  .knr-header__nav,
+  .knr-header__action--account {
+    display: none;
+  }
+
+  .knr-header__actions {
+    gap: 16px;
+  }
+
+  .knr-header__logo-image {
+    width: 130px;
+  }
+
+  .knr-header__drawer {
+    display: block;
+  }
+}

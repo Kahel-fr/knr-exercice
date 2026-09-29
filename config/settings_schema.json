@@ -2116,5 +2116,30 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "KNR - Livraison",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Délai utilisé par le bandeau d'annonce ([jours], [heures]) et par la date de livraison estimée de la fiche produit. À aligner sur Paramètres > Expédition et livraison, qui calcule les dates affichées au checkout."
+      },
+      {
+        "type": "range",
+        "id": "knr_delivery_days",
+        "label": "Délai de livraison",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "unit": "j",
+        "default": 2
+      },
+      {
+        "type": "checkbox",
+        "id": "knr_delivery_business_days",
+        "label": "Compter uniquement les jours ouvrés",
+        "default": true
+      }
+    ]
   }
 ]

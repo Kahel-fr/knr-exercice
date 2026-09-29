@@ -1,0 +1,15 @@
+{% doc %}
+  Variables CSS de centrage sur le point focal, à placer dans le style du conteneur .knr-focal (voir knr-base.css).
+  L'image doit exposer presentation.focal_point : utiliser un média de type image (media, featured_media),
+  pas preview_image ni featured_image.
+
+  @param {object} image - Image ou média de type image
+{% enddoc %}
+
+{%- liquid
+  assign focal_point = image.presentation.focal_point
+  assign focal_x = focal_point.x | default: 50 | divided_by: 100.0
+  assign focal_y = focal_point.y | default: 50 | divided_by: 100.0
+  assign ratio = image.aspect_ratio | default: 1
+-%}
+--knr-ratio: {{ ratio }}; --knr-focal-x: {{ focal_x }}; --knr-focal-y: {{ focal_y }};
